@@ -21,14 +21,16 @@ class ViewController: UIViewController {
         return NSURL() as URL // shouldn't happen
     }
     var fileURL : URL?
-    var files = [URL]() //Optional filesURL
+    var files = [URL]() //Optional files url
 
     //UIDocument & Data model properties
-    var doc : PeopleDocument!
+    var doc : PeopleDocument?
     var people : [Person] { // point to the document's model object
-        get { return self.doc.people }
-        set { self.doc.people = newValue }
+        get { return self.doc!.people }
+        set { self.doc!.people = newValue }
     }
+    
+    @IBOutlet weak var listView: UITextView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,18 +39,46 @@ class ViewController: UIViewController {
         self.navigationItem.rightBarButtonItems = [b]
         self.title = "Group"
         
-        //TODO: -0 Listing file names
+        listFiles()
+        
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        NotificationCenter.default.addObserver(self, selector: #selector(forceSave), name: UIApplication.didEnterBackgroundNotification, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.forceSave(nil)
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @IBAction func listRefreshBtnPressed(_ sender: UIButton) {
+        listView.text = ""
+        listFiles()
+    }
+}
+
+//MARK: - Business Logic
+extension ViewController {
+    
+    //TODO: -0 Listing file names
+    func listFiles() {
         do {
             let files = try fm.contentsOfDirectory(at: docsURL, includingPropertiesForKeys: nil).filter({ (url) -> Bool in
                 return url.pathExtension == "pplgrp"
             })
             
-            print("listing file name")
             for file in files {
                 let fileName = file.lastPathComponent
-                print(fileName)
+                listView.text += "\(fileName)\n"
             }
-             
+            
         } catch {
             print(error)
         }
@@ -92,7 +122,7 @@ class ViewController: UIViewController {
         //If the URL existed, opens a document asynchronously.
         //If not existed, Saves document data to the specified location.
         if let _ = try? fileURL.checkResourceIsReachable() {
-            self.doc.open()
+            self.doc?.open()
             //Calling uidocument.load(fromContents: ofType:) to load document's data
             print("2.1 Opening \(fileURL.lastPathComponent)")
             
@@ -100,7 +130,7 @@ class ViewController: UIViewController {
             
         } else {
             //Creating new data
-            self.doc.save(to:self.doc.fileURL,
+            self.doc!.save(to:self.doc!.fileURL,
                           for: .forCreating) //for creating a new document file with empty data content in it.
             //Calling uidocument.contents(forType:) to save data to the document
             print("2.2 Created document file \(fileURL.lastPathComponent)")
@@ -108,7 +138,7 @@ class ViewController: UIViewController {
             addData()
             
             //4- UIDocument updating data
-            self.doc.updateChangeCount(.done)
+            self.doc?.updateChangeCount(.done)
             print("4. Updating Document's data..")
         }
 
@@ -135,26 +165,17 @@ class ViewController: UIViewController {
             }
         }
     }
-    
+
     //TODO: -5 Force Saving
     @objc func forceSave(_: Any?) {
-        print("force save")
-        self.doc.save(to:self.doc.fileURL, for:.forOverwriting)
+        guard let doc = self.doc
+        else {
+            print("Underground force saving: uidocument subclass instance negative.")
+            return
+        }
+        doc.save(to: doc.fileURL, for: .forOverwriting)
+        print("force saving")
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(forceSave), name: UIApplication.didEnterBackgroundNotification, object: nil)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.forceSave(nil)
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
 
 }
