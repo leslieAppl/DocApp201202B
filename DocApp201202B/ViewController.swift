@@ -99,18 +99,20 @@ class ViewController: UIViewController {
             readData()
             
         } else {
+            //Creating new data
             self.doc.save(to:self.doc.fileURL,
                           for: .forCreating) //for creating a new document file with empty data content in it.
             //Calling uidocument.contents(forType:) to save data to the document
             print("2.2 Created document file \(fileURL.lastPathComponent)")
             
             addData()
+            
+            //4- UIDocument updating data
+            self.doc.updateChangeCount(.done)
+            print("4. Updating Document's data..")
         }
 
         
-        //4- UIDocument updating data
-        self.doc.updateChangeCount(.done)
-        print("4. Updating Document's data..")
 
     }
     
