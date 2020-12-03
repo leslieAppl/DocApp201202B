@@ -13,6 +13,8 @@
 		CE03A8632577BCE80084917D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE03A8612577BCE80084917D /* Main.storyboard */; };
 		CE03A8652577BCEC0084917D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE03A8642577BCEC0084917D /* Assets.xcassets */; };
 		CE03A8682577BCEC0084917D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE03A8662577BCEC0084917D /* LaunchScreen.storyboard */; };
+		CE03A8742577BDCE0084917D /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE03A8732577BDCE0084917D /* Person.swift */; };
+		CE03A8772577BE170084917D /* PeopleDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE03A8762577BE170084917D /* PeopleDocument.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		CE03A8642577BCEC0084917D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CE03A8672577BCEC0084917D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CE03A8692577BCEC0084917D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CE03A8732577BDCE0084917D /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
+		CE03A8762577BE170084917D /* PeopleDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleDocument.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +60,8 @@
 		CE03A85A2577BCE80084917D /* DocApp201202B */ = {
 			isa = PBXGroup;
 			children = (
+				CE03A8732577BDCE0084917D /* Person.swift */,
+				CE03A8762577BE170084917D /* PeopleDocument.swift */,
 				CE03A85B2577BCE80084917D /* AppDelegate.swift */,
 				CE03A85D2577BCE80084917D /* SceneDelegate.swift */,
 				CE03A85F2577BCE80084917D /* ViewController.swift */,
@@ -138,7 +144,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				CE03A8602577BCE80084917D /* ViewController.swift in Sources */,
+				CE03A8772577BE170084917D /* PeopleDocument.swift in Sources */,
 				CE03A85C2577BCE80084917D /* AppDelegate.swift in Sources */,
+				CE03A8742577BDCE0084917D /* Person.swift in Sources */,
 				CE03A85E2577BCE80084917D /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -289,6 +297,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PDY29GF949;
 				INFOPLIST_FILE = DocApp201202B/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -296,7 +305,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.gmail.appl.leslie.DocApp201202B;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -308,6 +317,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PDY29GF949;
 				INFOPLIST_FILE = DocApp201202B/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -315,7 +325,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.gmail.appl.leslie.DocApp201202B;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
