@@ -42,7 +42,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let b = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(doAddFile(_:)))
+        let b = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createFile(_:)))
         self.navigationItem.rightBarButtonItems = [b]
         self.title = "Group"
         
@@ -79,7 +79,90 @@ class ViewController: UIViewController {
     }
 
     @IBAction func addDataBtnPressed(_ sender: UIButton) {
+        addData()
+    }
+    
+    @IBAction func relaodDataBtnPressed(_ sender: UIButton) {
         
+    }
+    
+    @IBAction func deleteFileBtnPressed(_ sender: UIButton) {
+        
+    }
+}
+
+//MARK: - Business Logic
+extension ViewController {
+    
+    //TODO: - 0 Listing file names
+    func listFiles() {
+        listView.text = ""  //clean view first
+
+        do {
+            let files = try fm.contentsOfDirectory(at: docsURL, includingPropertiesForKeys: nil).filter({ (url) -> Bool in
+                return url.pathExtension == "pplgrp"
+            })
+            
+            for file in files {
+                let fileName = file.lastPathComponent
+                listView.text += "\(fileName)\n"
+            }
+            
+        } catch {
+            print(error)
+        }
+    }
+    
+    
+
+    //TODO: - 1 Creating File.
+    @objc func createFile(_: Any) {
+        
+        self.statusBar.text = ""    //clean status bar first
+        
+        //1 Using alert view to create file name.
+        let av = UIAlertController(title: "New File", message: "Enter name", preferredStyle: .alert)
+        av.addTextField { (text) in
+            text.autocapitalizationType = .words
+        }
+        av.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        av.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in
+            
+            guard let name = av.textFields?[0].text, !name.isEmpty else {return}
+            
+            //2 Creating File URL with the file name.
+            self.fileURL = self.docsURL.appendingPathComponent((name as NSString).appendingPathExtension("pplgrp")!)
+            
+            guard let fileURL = self.fileURL else { return }
+            
+            // really should check to see if file by this name exists
+            if let _ = try? fileURL.checkResourceIsReachable() {
+
+                //alerting file name duplicated
+                let av = UIAlertController(title: "File Name Duplicated", message: "Please change the file name", preferredStyle: .alert)
+                av.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(av, animated: true, completion: nil)
+            }
+            else {
+                //3 Init UIDocument instance including empty data
+                self.doc = PeopleDocument(fileURL: fileURL)
+                
+                //4 Saving data to document .forCreating
+                self.doc!.save(to: self.doc!.fileURL, for: .forCreating, completionHandler: nil)
+                
+                self.statusBar.text = " Created document: \(fileURL.lastPathComponent)"
+                self.files.append(self.fileURL!)    //Optional
+            }
+        }))
+        
+        self.present(av, animated: true)
+        
+//        self.listFiles()
+        //Note: Archiving document will lead to time interal delay! So, you cann't scan out new created file as soon as saving the new file.
+    }
+    
+    //TODO: - 2 Adding Data
+    func addData() {
         //TODO: Instructing add new data to a specified file url with an alert view.
         let av = UIAlertController(title: "File Name", message: "Please enter file name for adding data.", preferredStyle: .alert)
         av.addTextField(configurationHandler: {$0.autocapitalizationType = .words})
@@ -115,7 +198,7 @@ class ViewController: UIViewController {
                 //6 updating data changed
                 self.doc?.updateChangeCount(.done)
                 
-                self.statusBar.text = "New data added into: \(fileURL.lastPathComponent)"
+                self.statusBar.text = " New data added into: \(fileURL.lastPathComponent)"
             }
             else {
                 
@@ -127,87 +210,13 @@ class ViewController: UIViewController {
 
         }))
         self.present(av, animated: true, completion: nil)
-        
-    }
-    
-    @IBAction func relaodDataBtnPressed(_ sender: UIButton) {
-        
-    }
-    
-    @IBAction func deleteFileBtnPressed(_ sender: UIButton) {
-        
-    }
-}
 
-//MARK: - Business Logic
-extension ViewController {
-    
-    //TODO: -0 Listing file names
-    func listFiles() {
-        listView.text = ""  //clean view first
-
-        do {
-            let files = try fm.contentsOfDirectory(at: docsURL, includingPropertiesForKeys: nil).filter({ (url) -> Bool in
-                return url.pathExtension == "pplgrp"
-            })
-            
-            for file in files {
-                let fileName = file.lastPathComponent
-                listView.text += "\(fileName)\n"
-            }
-            
-        } catch {
-            print(error)
-        }
     }
     
     
-
-    //TODO: -1 Creating File URL.
-    @objc func doAddFile(_: Any) {
-        
-        self.statusBar.text = ""    //clean status bar first
-        
-        //1 Using alert view to create file name.
-        let av = UIAlertController(title: "New File", message: "Enter name", preferredStyle: .alert)
-        av.addTextField { (text) in
-            text.autocapitalizationType = .words
-        }
-        av.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        av.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in
-            
-            guard let name = av.textFields?[0].text, !name.isEmpty else {return}
-            
-            //2 Creating File URL with the file name.
-            self.fileURL = self.docsURL.appendingPathComponent((name as NSString).appendingPathExtension("pplgrp")!)
-            
-            guard let fileURL = self.fileURL else { return }
-            
-            // really should check to see if file by this name exists
-            if let _ = try? fileURL.checkResourceIsReachable() {
-
-                //alerting file name duplicated
-                let av = UIAlertController(title: "File Name Duplicated", message: "Please change the file name", preferredStyle: .alert)
-                av.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self.present(av, animated: true, completion: nil)
-            }
-            else {
-                //3 Init UIDocument instance including empty data
-                self.doc = PeopleDocument(fileURL: fileURL)
-                
-                //4 Saving data to document .forCreating
-                self.doc!.save(to: self.doc!.fileURL, for: .forCreating, completionHandler: nil)
-                
-                self.statusBar.text = "Created document: \(fileURL.lastPathComponent)"
-                self.files.append(self.fileURL!)    //Optional
-            }
-        }))
-        
-        self.present(av, animated: true)
-        
-//        self.listFiles()
-        //Note: Archiving document will lead to time interal delay! So, you cann't scan out new created file as soon as saving the new file.
-    }
+    
+    
+    
     
     
     //TODO: -3 Creating Data Model Object
