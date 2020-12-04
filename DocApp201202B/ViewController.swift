@@ -79,7 +79,23 @@ class ViewController: UIViewController {
     }
 
     @IBAction func addDataBtnPressed(_ sender: UIButton) {
-        addData()
+        
+        //MARK: check the name is not nil first, then activate alert view
+        guard let firstName = self.firstNameTxtField.text else {return}
+        guard let lastName = self.lastNameTxtField.text else {return}
+
+        if firstName != "" || lastName != "" {
+            self.firstNameTxtField.text = ""
+            self.lastNameTxtField.text = ""
+            addData(firstName: firstName, lastName: lastName)
+        }
+        else {
+            //Missing data alert
+            let av = UIAlertController(title: "Missing data", message: "Please enter a name", preferredStyle: .alert)
+            av.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(av, animated: true, completion: nil)
+        }
+
     }
     
     @IBAction func relaodDataBtnPressed(_ sender: UIButton) {
@@ -94,7 +110,7 @@ class ViewController: UIViewController {
 //MARK: - Business Logic
 extension ViewController {
     
-    //TODO: - 0 Listing file names
+    //MARK: - 0 Listing file names
     func listFiles() {
         listView.text = ""  //clean view first
 
@@ -115,7 +131,7 @@ extension ViewController {
     
     
 
-    //TODO: - 1 Creating File.
+    //MARK: - 1 Creating File.
     @objc func createFile(_: Any) {
         
         self.statusBar.text = ""    //clean status bar first
@@ -161,9 +177,10 @@ extension ViewController {
         //Note: Archiving document will lead to time interal delay! So, you cann't scan out new created file as soon as saving the new file.
     }
     
-    //TODO: - 2 Adding Data
-    func addData() {
-        //TODO: Instructing add new data to a specified file url with an alert view.
+    //MARK: - 2 Adding Data
+    func addData(firstName: String, lastName: String) {
+                
+        //MARK: Instructing add new data to a specified file url with an alert view.
         let av = UIAlertController(title: "File Name", message: "Please enter file name for adding data.", preferredStyle: .alert)
         av.addTextField(configurationHandler: {$0.autocapitalizationType = .words})
         av.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -183,11 +200,6 @@ extension ViewController {
     
                 //3 init uidocument object with url
                 self.doc = PeopleDocument(fileURL: self.fileURL!)
-
-                guard let firstName = self.firstNameTxtField.text else {return}
-                guard let lastName = self.lastNameTxtField.text else {return}
-                self.firstNameTxtField.text = ""
-                self.lastNameTxtField.text = ""
                 
                 self.view.endEditing(true)  //dismiss keyboard
 
@@ -222,7 +234,7 @@ extension ViewController {
     
     
     
-    //TODO: -3 Creating Data Model Object
+    //MARK: -3 Creating Data Model Object
     func doAddData() {
         let newP = Person(firstName: "Test", lastName: "Leslie")
         self.people.append(newP)
@@ -233,7 +245,7 @@ extension ViewController {
         print("4. Updating Document's data..")
     }
     
-    //TODO: -4 Reading data from document
+    //MARK: -4 Reading data from document
     func readData() {
         guard let fileURL = fileURL else { return }
         let doc = PeopleDocument(fileURL: fileURL)
@@ -246,7 +258,7 @@ extension ViewController {
         }
     }
 
-    //TODO: -5 Force Saving
+    //MARK: - 5 Force Saving
     @objc func forceSave(_: Any?) {
         guard let doc = self.doc
         else {
