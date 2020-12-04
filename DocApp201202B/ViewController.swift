@@ -108,6 +108,7 @@ extension ViewController {
             
             // really should check to see if file by this name exists
             guard let fileURL = self.fileURL else { return }
+            
             if let _ = try? fileURL.checkResourceIsReachable() {
 
                 //alerting file name duplicated
@@ -116,8 +117,13 @@ extension ViewController {
                 self.present(av, animated: true, completion: nil)
             }
             else {
+                //3 Init UIDocument instance including empty data
+                self.doc = PeopleDocument(fileURL: fileURL)
                 
-                self.doAddData()
+                //4 Saving data to document .forCreating
+                self.doc!.save(to: self.doc!.fileURL, for: .forCreating, completionHandler: nil)
+                
+                self.statusBar.text = "Created document: \(fileURL.lastPathComponent)"
                 self.files.append(self.fileURL!)    //Optional
             }
         }))
@@ -128,21 +134,9 @@ extension ViewController {
         //Note: Archiving document will lead to time interal delay! So, you cann't scan out new created file as soon as saving the new file.
     }
     
-    //TODO: -2 Adding Data into Document File
-    func doAddData() {
-        
-        guard let fileURL = fileURL else { return }
-        // 1 init UIDocument instance including empty data
-        self.doc = PeopleDocument(fileURL: fileURL)
-        
-        // 2 saving data to document .forCreating
-        self.doc!.save(to: self.doc!.fileURL, for: .forCreating, completionHandler: nil)
-        
-        self.statusBar.text = "Created document: \(fileURL.lastPathComponent)"
-    }
     
     //TODO: -3 Creating Data Model Object
-    func addData() {
+    func doAddData() {
         let newP = Person(firstName: "Test", lastName: "Leslie")
         self.people.append(newP)
         print("3. New file data created in the \(self.fileURL!.lastPathComponent)..")
