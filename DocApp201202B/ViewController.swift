@@ -21,7 +21,7 @@ class ViewController: UIViewController {
         return NSURL() as URL // shouldn't happen
     }
     var fileURL : URL?
-    var files = [URL]() //Optional files url
+    var files = [URL]() //Optional
 
     //UIDocument & Data model properties
     var doc : PeopleDocument?
@@ -31,6 +31,7 @@ class ViewController: UIViewController {
     }
     
     @IBOutlet weak var listView: UITextView!
+    @IBOutlet weak var statusBar: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,7 +60,6 @@ class ViewController: UIViewController {
     }
     
     @IBAction func listRefreshBtnPressed(_ sender: UIButton) {
-        listView.text = ""
         listFiles()
     }
 }
@@ -69,6 +69,8 @@ extension ViewController {
     
     //TODO: -0 Listing file names
     func listFiles() {
+        listView.text = ""  //clean view first
+
         do {
             let files = try fm.contentsOfDirectory(at: docsURL, includingPropertiesForKeys: nil).filter({ (url) -> Bool in
                 return url.pathExtension == "pplgrp"
@@ -83,11 +85,15 @@ extension ViewController {
             print(error)
         }
     }
+    
+    
 
     //TODO: -1 Creating File URL.
     @objc func doAddFile(_: Any) {
         
-        //Using alert view to create file name.
+        self.statusBar.text = ""    //clean status bar first
+        
+        //1 Using alert view to create file name.
         let av = UIAlertController(title: "New Group", message: "Enter name", preferredStyle: .alert)
         av.addTextField { (text) in
             text.autocapitalizationType = .words
@@ -96,54 +102,43 @@ extension ViewController {
         av.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in
             
             guard let name = av.textFields![0].text, !name.isEmpty else {return}
-            print("New file name is \(name)")
             
-            //Creating File URL
+            //2 Creating File URL with the file name.
             self.fileURL = self.docsURL.appendingPathComponent((name as NSString).appendingPathExtension("pplgrp")!)
+            
             // really should check to see if file by this name exists
+            guard let fileURL = self.fileURL else { return }
+            if let _ = try? fileURL.checkResourceIsReachable() {
 
-            print("0. created file url: \(String(describing: self.fileURL!.deletingLastPathComponent()))\(String(describing: self.fileURL!.lastPathComponent))")
-            self.doAddData()
-            self.files.append(self.fileURL!)    //Optional
-//            print(self.files)
+                //alerting file name duplicated
+                let av = UIAlertController(title: "File Name Duplicated", message: "Please change the file name", preferredStyle: .alert)
+                av.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(av, animated: true, completion: nil)
+            }
+            else {
+                
+                self.doAddData()
+                self.files.append(self.fileURL!)    //Optional
+            }
         }))
         
         self.present(av, animated: true)
+        
+//        self.listFiles()
+        //Note: Archiving document will lead to time interal delay! So, you cann't scan out new created file as soon as saving the new file.
     }
     
-    //TODO: -2 Create OR Open A Document File
+    //TODO: -2 Adding Data into Document File
     func doAddData() {
         
         guard let fileURL = fileURL else { return }
-        //1- Init UIDocument instance with the file url
+        // 1 init UIDocument instance including empty data
         self.doc = PeopleDocument(fileURL: fileURL)
-        print("1. Inited UIDocument instance of \(fileURL.lastPathComponent).")
-        //2- Checking URL...
-        //If the URL existed, opens a document asynchronously.
-        //If not existed, Saves document data to the specified location.
-        if let _ = try? fileURL.checkResourceIsReachable() {
-            self.doc?.open()
-            //Calling uidocument.load(fromContents: ofType:) to load document's data
-            print("2.1 Opening \(fileURL.lastPathComponent)")
-            
-            readData()
-            
-        } else {
-            //Creating new data
-            self.doc!.save(to:self.doc!.fileURL,
-                          for: .forCreating) //for creating a new document file with empty data content in it.
-            //Calling uidocument.contents(forType:) to save data to the document
-            print("2.2 Created document file \(fileURL.lastPathComponent)")
-            
-            addData()
-            
-            //4- UIDocument updating data
-            self.doc?.updateChangeCount(.done)
-            print("4. Updating Document's data..")
-        }
-
         
-
+        // 2 saving data to document .forCreating
+        self.doc!.save(to: self.doc!.fileURL, for: .forCreating, completionHandler: nil)
+        
+        self.statusBar.text = "Created document: \(fileURL.lastPathComponent)"
     }
     
     //TODO: -3 Creating Data Model Object
@@ -151,6 +146,10 @@ extension ViewController {
         let newP = Person(firstName: "Test", lastName: "Leslie")
         self.people.append(newP)
         print("3. New file data created in the \(self.fileURL!.lastPathComponent)..")
+        
+        //4- UIDocument updating data
+        self.doc?.updateChangeCount(.done)
+        print("4. Updating Document's data..")
     }
     
     //TODO: -4 Reading data from document
