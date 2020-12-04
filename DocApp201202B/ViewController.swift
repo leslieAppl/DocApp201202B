@@ -45,11 +45,11 @@ class ViewController: UIViewController {
         let b = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createFile(_:)))
         self.navigationItem.rightBarButtonItems = [b]
         self.title = "Group"
-        
-        openFileTxtField.bindToKeyboard()
-        deleteFileTxtField.bindToKeyboard()
-        firstNameTxtField.bindToKeyboard()
-        lastNameTxtField.bindToKeyboard()
+        view.bindToKeyboard()
+//        openFileTxtField.bindToKeyboard()
+//        firstNameTxtField.bindToKeyboard()
+//        lastNameTxtField.bindToKeyboard()
+//        deleteFileTxtField.bindToKeyboard()
         
         listFiles()
         
@@ -189,6 +189,8 @@ extension ViewController {
                 self.firstNameTxtField.text = ""
                 self.lastNameTxtField.text = ""
                 
+                self.view.endEditing(true)  //dismiss keyboard
+
                 //4 init Person object
                 let newP = Person(firstName: firstName, lastName: lastName)
                 
@@ -198,7 +200,8 @@ extension ViewController {
                 //6 updating data changed
                 self.doc?.updateChangeCount(.done)
                 
-                self.statusBar.text = " New data added into: \(fileURL.lastPathComponent)"
+                self.statusBar.text = " \"\(newP.firstName) \(newP.lastName)\" added into: \(fileURL.lastPathComponent)"
+                
             }
             else {
                 
@@ -258,10 +261,32 @@ extension ViewController {
 }
 
 //MARK: - Keyboard binding
-extension UIView {
-    // Any sub class of UIView can be binded to the Keyboard [ e.g UIButton.bindToKeyboard() ]
-    // Bound components have to be under the hierarchy of root 'UIView'.
+//extension UIView {
+//    // Any sub class of UIView can be binded to the Keyboard [ e.g UIButton.bindToKeyboard() ]
+//    // Bound components have to be under the hierarchy of root 'UIView'.
+//
+//    func bindToKeyboard() {
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+//    }
+//
+//    @objc func keyboardWillChange(_ notification: NSNotification) {
+//        let duration = notification.userInfo![UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
+//        let curve = notification.userInfo![UIResponder.keyboardAnimationCurveUserInfoKey] as! UInt
+//
+//    //Identifies the starting frame rectangle of the keyboard in screen coordinates.
+//         let startingFrame = (notification.userInfo![UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+//    //Identifies the ending frame rectangle of the keyboard in screen coordinates.
+//         let endingFrame = (notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+//         let deltaY = endingFrame.origin.y - startingFrame.origin.y
+//
+//        UIView.animateKeyframes(withDuration: duration, delay: 0.0, options: UIView.KeyframeAnimationOptions(rawValue: curve), animations: { self.frame.origin.y += deltaY }, completion: nil)
+//    }
+//
+//}
 
+extension UIView {
+    // Any sub class of UIView can be bound to the Keyboard [ e.g UIButton.bindToKeyboard() ]
+    // Bound components have to be under the hierarchy of root 'UIView'.
     func bindToKeyboard() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
     }
