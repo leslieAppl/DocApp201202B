@@ -46,13 +46,7 @@ class ViewController: UIViewController {
         self.navigationItem.rightBarButtonItems = [b]
         self.title = "Group"
         view.bindToKeyboard()
-//        openFileTxtField.bindToKeyboard()
-//        firstNameTxtField.bindToKeyboard()
-//        lastNameTxtField.bindToKeyboard()
-//        deleteFileTxtField.bindToKeyboard()
-        
         listFiles()
-        
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -228,12 +222,6 @@ extension ViewController {
 
     }
     
-    
-    
-    
-    
-    
-    
     //MARK: -3 Creating Data Model Object
     func doAddData() {
         let newP = Person(firstName: "Test", lastName: "Leslie")
@@ -271,30 +259,6 @@ extension ViewController {
     
     
 }
-
-//MARK: - Keyboard binding
-//extension UIView {
-//    // Any sub class of UIView can be binded to the Keyboard [ e.g UIButton.bindToKeyboard() ]
-//    // Bound components have to be under the hierarchy of root 'UIView'.
-//
-//    func bindToKeyboard() {
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-//    }
-//
-//    @objc func keyboardWillChange(_ notification: NSNotification) {
-//        let duration = notification.userInfo![UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
-//        let curve = notification.userInfo![UIResponder.keyboardAnimationCurveUserInfoKey] as! UInt
-//
-//    //Identifies the starting frame rectangle of the keyboard in screen coordinates.
-//         let startingFrame = (notification.userInfo![UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
-//    //Identifies the ending frame rectangle of the keyboard in screen coordinates.
-//         let endingFrame = (notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-//         let deltaY = endingFrame.origin.y - startingFrame.origin.y
-//
-//        UIView.animateKeyframes(withDuration: duration, delay: 0.0, options: UIView.KeyframeAnimationOptions(rawValue: curve), animations: { self.frame.origin.y += deltaY }, completion: nil)
-//    }
-//
-//}
 
 extension UIView {
     // Any sub class of UIView can be bound to the Keyboard [ e.g UIButton.bindToKeyboard() ]
