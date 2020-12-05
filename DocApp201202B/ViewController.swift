@@ -121,6 +121,9 @@ extension ViewController {
         } catch {
             print(error)
         }
+        
+        statusBar.text = ""
+        statusBar.text = " File list refreshed"
     }
     
     
@@ -130,7 +133,7 @@ extension ViewController {
         
         self.statusBar.text = ""    //clean status bar first
         
-        //1 Using alert view to create file name.
+        //1 Create file name.
         let av = UIAlertController(title: "New File", message: "Enter name", preferredStyle: .alert)
         av.addTextField { (text) in
             text.autocapitalizationType = .words
@@ -140,7 +143,7 @@ extension ViewController {
             
             guard let name = av.textFields?[0].text, !name.isEmpty else {return}
             
-            //2 Creating File URL with the file name.
+            //2 Creating File URL.
             self.fileURL = self.docsURL.appendingPathComponent((name as NSString).appendingPathExtension("pplgrp")!)
             
             guard let fileURL = self.fileURL else { return }
@@ -154,7 +157,7 @@ extension ViewController {
                 self.present(av, animated: true, completion: nil)
             }
             else {
-                //3 Init UIDocument instance including empty data
+                //3 Init UIDocument with url.
                 self.doc = PeopleDocument(fileURL: fileURL)
                 
                 //4 Saving data to document .forCreating
@@ -192,7 +195,7 @@ extension ViewController {
             // really should check to see if file by this name exists
             if let _ = try? fileURL.checkResourceIsReachable() {
     
-                //3 init uidocument object with url
+                //3 init uidocument with url.
                 self.doc = PeopleDocument(fileURL: self.fileURL!)
                 
                 self.view.endEditing(true)  //dismiss keyboard
@@ -200,10 +203,10 @@ extension ViewController {
                 //4 init Person object
                 let newP = Person(firstName: firstName, lastName: lastName)
                 
-                //5 adding Person to People Model in the UIDocument object
+                //5 adding Person to People Model in UIDocument object
                 self.people.append(newP)
                 
-                //6 updating data changed
+                //6 updating data change
                 self.doc?.updateChangeCount(.done)
                 
                 self.statusBar.text = " \"\(newP.firstName) \(newP.lastName)\" added into: \(fileURL.lastPathComponent)"
