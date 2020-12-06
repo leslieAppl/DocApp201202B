@@ -21,7 +21,7 @@ class ViewController: UIViewController {
         return NSURL() as URL // shouldn't happen
     }
     var fileURL : URL?
-    var files = [URL]() //Optional
+    var files = [URL]() //Optional for table view
 
     //UIDocument & Data model properties
     var doc : PeopleDocument?
@@ -47,6 +47,7 @@ class ViewController: UIViewController {
         self.title = "Group"
 
         listFiles()
+        displayDataView.text = ""
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -66,10 +67,15 @@ class ViewController: UIViewController {
     
     @IBAction func listRefreshBtnPressed(_ sender: UIButton) {
         listFiles()
+        displayDataView.text = ""
+        addData2()
     }
     
     @IBAction func openFileBtnPressed(_ sender: UIButton) {
-        
+        guard let name = openFileTxtField.text else {return}
+        readData(from: name)
+        view.endEditing(true)
+        displayDataView.text = ""
     }
 
     @IBAction func addDataBtnPressed(_ sender: UIButton) {
@@ -90,14 +96,18 @@ class ViewController: UIViewController {
             self.present(av, animated: true, completion: nil)
         }
 
+        displayDataView.text = ""
     }
     
     @IBAction func relaodDataBtnPressed(_ sender: UIButton) {
-        
+        guard let name = fileURL?.deletingPathExtension().lastPathComponent else {return}
+        print("relaod file name: \(name)")
+//        readData(from: name)
+        addData3()
     }
     
     @IBAction func deleteFileBtnPressed(_ sender: UIButton) {
-        
+        createFile2()
     }
 }
 
@@ -155,6 +165,9 @@ extension ViewController {
                 let av = UIAlertController(title: "File Name Duplicated", message: "Please change the file name", preferredStyle: .alert)
                 av.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 self.present(av, animated: true, completion: nil)
+                
+                self.statusBar.text = ""
+                self.statusBar.text = " \(fileURL.lastPathComponent) file name duplicated."
             }
             else {
                 //3 Init UIDocument with url.
@@ -175,9 +188,57 @@ extension ViewController {
     }
     
     //MARK: - 2 Adding Data
+    func createFile2() {
+        //Create file
+        fileURL = self.docsURL.appendingPathComponent("test.pplgrp")
+        doc = PeopleDocument(fileURL: self.fileURL!)
+        doc!.save(to: fileURL!, for: .forCreating, completionHandler: nil)
+        
+    }
+    func addData2() {
+        fileURL = self.docsURL.appendingPathComponent("test.pplgrp")
+        doc = PeopleDocument(fileURL: self.fileURL!)
+        doc?.open(completionHandler: { (success) in
+            
+            //Add data
+            let newP = Person(firstName: "Test", lastName: "test!")
+            self.people.append(newP)
+            let newp2 = Person(firstName: "Test2", lastName: "test!")
+            self.people.append(newp2)
+            print(self.people.count)
+            self.doc!.updateChangeCount(.done)
+//            self.doc?.close(completionHandler: nil)
+            print("people: \(self.doc!.people.count)")
+        })
+        
+        //Read data
+//        doc!.open(completionHandler: { (success) in
+//            print(self.doc!.people.count)
+//        })
+
+    }
+    func addData3() {
+        fileURL = self.docsURL.appendingPathComponent("test.pplgrp")
+        doc = PeopleDocument(fileURL: self.fileURL!)
+        
+        //Add data
+//        let newP = Person(firstName: "Test3", lastName: "test!")
+//        people.append(newP)
+//        let newp2 = Person(firstName: "Test4", lastName: "test!")
+//        people.append(newp2)
+//        print(people.count)
+//        self.doc!.updateChangeCount(.done)
+//        print("people: \(doc!.people.count)")
+        
+        //Read data
+        doc!.open(completionHandler: { (success) in
+            print(self.doc!.people.count)
+        })
+
+    }
+
     func addData(firstName: String, lastName: String) {
-                
-        //MARK: Instructing add new data to a specified file url with an alert view.
+            
         let av = UIAlertController(title: "File Name", message: "Please enter file name for adding data.", preferredStyle: .alert)
         av.addTextField(configurationHandler: {$0.autocapitalizationType = .words})
         av.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -207,7 +268,7 @@ extension ViewController {
                 self.people.append(newP)
                 
                 //6 updating data change
-                self.doc?.updateChangeCount(.done)
+                self.doc!.updateChangeCount(.done)
                 
                 self.statusBar.text = " \"\(newP.firstName) \(newP.lastName)\" added into: \(fileURL.lastPathComponent)"
                 
@@ -218,34 +279,58 @@ extension ViewController {
                 let av = UIAlertController(title: "File was not found", message: "Please create: \(fileURL.lastPathComponent) before adding data into it.", preferredStyle: .alert)
                 av.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                 self.present(av, animated: true, completion: nil)
+                
+                self.statusBar.text = ""
+                self.statusBar.text = " \(fileURL.lastPathComponent) file name duplicated."
             }
-
+            
         }))
         self.present(av, animated: true, completion: nil)
-
-    }
-    
-    //MARK: -3 Creating Data Model Object
-    func doAddData() {
-        let newP = Person(firstName: "Test", lastName: "Leslie")
-        self.people.append(newP)
-        print("3. New file data created in the \(self.fileURL!.lastPathComponent)..")
         
-        //4- UIDocument updating data
-        self.doc?.updateChangeCount(.done)
-        print("4. Updating Document's data..")
     }
     
-    //MARK: -4 Reading data from document
-    func readData() {
-        guard let fileURL = fileURL else { return }
-        let doc = PeopleDocument(fileURL: fileURL)
-        doc.open { (success) in
-            //Do sth after opening and loading data from document
-            let people = doc.people
-            for person in people {
-                print("Opened document \"\(fileURL.lastPathComponent)\" and read data: \(person)")
+    //MARK: 4 Reading data
+    func readData(from name: String) {
+        
+        displayDataView.text = ""
+
+        //1 creating file url
+        self.fileURL = self.docsURL.appendingPathComponent(name).appendingPathExtension("pplgrp")
+        
+        guard let fileURL = self.fileURL else { return }
+        
+        // really should check to see if file by this name exists
+        if let _ = try? fileURL.checkResourceIsReachable() {
+            //2 Creating UIDocument
+            let doc = PeopleDocument(fileURL: fileURL)
+            
+            //3 open document and load data.
+            doc.open { (success) in
+                //4 read data in document
+                let people = doc.people
+                for person in people {
+                    print(person.firstName)
+                    print(person.lastName)
+                    
+                    self.displayDataView.text += " \(person.firstName) \(person.lastName);"
+                }
             }
+            //4 close document.
+//            doc.close(completionHandler: nil)
+            
+            self.statusBar.text = ""
+            self.statusBar.text = " Read data from \(fileURL.lastPathComponent)"
+            
+            openFileTxtField.text = ""
+        }
+        else {
+            //Missing file alert
+            let av = UIAlertController(title: "Missing file", message: "Can't find \(fileURL.lastPathComponent).", preferredStyle: .alert)
+            av.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(av, animated: true, completion: nil)
+            
+            self.statusBar.text = ""
+            self.statusBar.text = " Can't find \(fileURL.lastPathComponent)"
         }
     }
 
