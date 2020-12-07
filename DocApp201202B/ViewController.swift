@@ -146,7 +146,6 @@ extension ViewController {
         self.statusBar.text = ""    //clean status bar first
         self.displayDataView.text = ""
         
-        //1 Create file name.
         let av = UIAlertController(title: "New File", message: "Enter name", preferredStyle: .alert)
         av.addTextField { (text) in
             text.autocapitalizationType = .words
@@ -156,7 +155,7 @@ extension ViewController {
             
             guard let name = av.textFields?[0].text?.trimmingCharacters(in: .whitespaces), !name.isEmpty else {return}
             
-            //2 Creating File URL.
+            //1 Creating File URL.
             self.fileURL = self.docsURL.appendingPathComponent((name as NSString).appendingPathExtension("pplgrp")!)
             
             guard let fileURL = self.fileURL else { return }
@@ -173,10 +172,10 @@ extension ViewController {
                 self.statusBar.text = " \(fileURL.lastPathComponent) file name duplicated."
             }
             else {
-                //3 Init UIDocument with url.
+                //2 Init UIDocument with url.
                 self.doc = PeopleDocument(fileURL: fileURL)
                 
-                //4 Saving data to document .forCreating
+                //3 Saving data to document .forCreating
                 self.doc!.save(to: self.doc!.fileURL, for: .forCreating, completionHandler: nil)
                 
                 self.statusBar.text = " Created document: \(fileURL.lastPathComponent)"
@@ -299,7 +298,7 @@ extension ViewController {
                 }
             }
             //4 close document.
-//            doc.close(completionHandler: nil)
+            doc.close(completionHandler: nil)
             
             self.statusBar.text = ""
             self.statusBar.text = " Read data from \(fileURL.lastPathComponent)"
