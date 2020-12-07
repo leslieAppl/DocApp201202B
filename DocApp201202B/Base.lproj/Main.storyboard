@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="chd-oj-gqh">
-                                <rect key="frame" x="20" y="382.5" width="335" height="80"/>
+                                <rect key="frame" x="20" y="380" width="335" height="80"/>
                                 <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="80" id="Gh1-VP-RfD"/>
@@ -28,7 +28,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JQd-p0-llY">
-                                <rect key="frame" x="333" y="349.5" width="22" height="25.5"/>
+                                <rect key="frame" x="333" y="347" width="22" height="25.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" image="arrow.clockwise" catalog="system"/>
                                 <connections>
@@ -36,13 +36,13 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Document File List:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VDn-VV-LMF">
-                                <rect key="frame" x="20" y="352" width="146" height="20.5"/>
+                                <rect key="frame" x="20" y="349.5" width="146" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Document File Content:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r7M-Oa-AGQ">
-                                <rect key="frame" x="20" y="472.5" width="179.5" height="20.5"/>
+                                <rect key="frame" x="20" y="470" width="179.5" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -74,7 +74,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kzU-D0-yue">
                                 <rect key="frame" x="330" y="127" width="25" height="24"/>
                                 <connections>
-                                    <action selector="openFileBtnPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Vdg-6O-eRk"/>
+                                    <action selector="ReadDataBtnPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Vdg-6O-eRk"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="contactAdd" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NuO-Xu-s3V">
@@ -101,32 +101,39 @@
                                 </subviews>
                             </stackView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U0I-MW-jac">
-                                <rect key="frame" x="20" y="505.5" width="335" height="161.5"/>
+                                <rect key="frame" x="20" y="503" width="335" height="164"/>
                                 <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
                                 <color key="textColor" systemColor="labelColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MBE-bR-dUs">
-                                <rect key="frame" x="333" y="470" width="22" height="25.5"/>
+                                <rect key="frame" x="333" y="467.5" width="22" height="25.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" image="arrow.clockwise" catalog="system"/>
                                 <connections>
                                     <action selector="relaodDataBtnPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="IM5-nW-KJS"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Delete A Document File:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QFU-jk-eo9">
-                                <rect key="frame" x="20" y="277.5" width="195" height="20.5"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rename or Delete A Document File:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QFU-jk-eo9">
+                                <rect key="frame" x="20" y="277.5" width="257" height="18"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <color key="textColor" systemColor="systemRedColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Please input a file name to delete  ..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="S0L-Ei-icz">
-                                <rect key="frame" x="20" y="308" width="335" height="34"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Please input a file name to rename or delete  ..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="S0L-Ei-icz">
+                                <rect key="frame" x="20" y="305.5" width="335" height="34"/>
                                 <color key="backgroundColor" systemColor="opaqueSeparatorColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h0T-8L-Nn4">
+                                <rect key="frame" x="330" y="274.5" width="25" height="24"/>
+                                <state key="normal" image="minus.circle" catalog="system"/>
+                                <connections>
+                                    <action selector="removeFileBtnPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dQ3-de-HdF"/>
+                                </connections>
+                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O8N-Kg-bHH">
                                 <rect key="frame" x="20" y="84.5" width="335" height="34"/>
                                 <color key="backgroundColor" red="0.56078431370000004" green="0.81176470590000005" blue="0.30588235289999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -137,11 +144,11 @@
                                 <color key="textColor" systemColor="systemRedColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h0T-8L-Nn4">
-                                <rect key="frame" x="330" y="276" width="25" height="24"/>
-                                <state key="normal" image="minus.circle" catalog="system"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m7I-vD-5cr">
+                                <rect key="frame" x="285" y="274.5" width="25" height="24"/>
+                                <state key="normal" image="pencil.circle" catalog="system"/>
                                 <connections>
-                                    <action selector="deleteFileBtnPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dQ3-de-HdF"/>
+                                    <action selector="renameFileBtnPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="F1g-bH-Esc"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -174,9 +181,11 @@
                             <constraint firstItem="hvW-DD-2Ak" firstAttribute="top" secondItem="O8N-Kg-bHH" secondAttribute="bottom" constant="10" id="cdF-HN-CRi"/>
                             <constraint firstItem="NuO-Xu-s3V" firstAttribute="centerY" secondItem="2bE-dk-mGQ" secondAttribute="centerY" id="ePc-I3-dZW"/>
                             <constraint firstItem="UV2-n3-7af" firstAttribute="trailing" secondItem="chd-oj-gqh" secondAttribute="trailing" constant="20" id="eoh-5E-Jcf"/>
+                            <constraint firstItem="h0T-8L-Nn4" firstAttribute="leading" secondItem="m7I-vD-5cr" secondAttribute="trailing" constant="20" id="fBm-Di-E3F"/>
                             <constraint firstItem="UV2-n3-7af" firstAttribute="trailing" secondItem="MBE-bR-dUs" secondAttribute="trailing" constant="20" id="fsc-h0-3cn"/>
                             <constraint firstItem="UV2-n3-7af" firstAttribute="trailing" secondItem="NuO-Xu-s3V" secondAttribute="trailing" constant="20" id="iag-b2-6BY"/>
                             <constraint firstItem="UV2-n3-7af" firstAttribute="trailing" secondItem="S0L-Ei-icz" secondAttribute="trailing" constant="20" id="jfO-ro-vId"/>
+                            <constraint firstItem="m7I-vD-5cr" firstAttribute="centerY" secondItem="QFU-jk-eo9" secondAttribute="centerY" id="jte-0o-8Qo"/>
                             <constraint firstItem="UV2-n3-7af" firstAttribute="trailing" secondItem="kzU-D0-yue" secondAttribute="trailing" constant="20" id="kBA-g9-MBS"/>
                             <constraint firstItem="U0I-MW-jac" firstAttribute="leading" secondItem="UV2-n3-7af" secondAttribute="leading" constant="20" id="kvs-cG-lbn"/>
                             <constraint firstItem="JEV-Vr-foV" firstAttribute="leading" secondItem="UV2-n3-7af" secondAttribute="leading" constant="20" id="n5F-vt-mfF"/>
@@ -193,12 +202,12 @@
                     </view>
                     <navigationItem key="navigationItem" id="dxp-Sp-1Mg"/>
                     <connections>
-                        <outlet property="deleteFileTxtField" destination="S0L-Ei-icz" id="EoI-Uu-D9i"/>
                         <outlet property="displayDataView" destination="U0I-MW-jac" id="5f0-MT-jUw"/>
                         <outlet property="firstNameTxtField" destination="ewp-H6-U1t" id="Ymc-kT-NhS"/>
                         <outlet property="lastNameTxtField" destination="PVy-nd-F1M" id="jxo-U4-1Td"/>
                         <outlet property="listView" destination="chd-oj-gqh" id="yzG-Hy-m5g"/>
                         <outlet property="openFileTxtField" destination="7mV-GQ-vR9" id="frA-Qj-T2y"/>
+                        <outlet property="renameAndRemoveFileTxtField" destination="S0L-Ei-icz" id="EoI-Uu-D9i"/>
                         <outlet property="statusBar" destination="O8N-Kg-bHH" id="kAQ-pl-nRZ"/>
                     </connections>
                 </viewController>
@@ -228,6 +237,7 @@
     <resources>
         <image name="arrow.clockwise" catalog="system" width="115" height="128"/>
         <image name="minus.circle" catalog="system" width="128" height="121"/>
+        <image name="pencil.circle" catalog="system" width="128" height="121"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

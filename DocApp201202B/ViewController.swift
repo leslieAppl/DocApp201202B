@@ -35,7 +35,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var displayDataView: UITextView!
     
     @IBOutlet weak var openFileTxtField: UITextField!
-    @IBOutlet weak var deleteFileTxtField: UITextField!
+    @IBOutlet weak var renameAndRemoveFileTxtField: UITextField!
     @IBOutlet weak var firstNameTxtField: UITextField!
     @IBOutlet weak var lastNameTxtField: UITextField!
     
@@ -70,11 +70,11 @@ class ViewController: UIViewController {
         displayDataView.text = ""
     }
     
-    @IBAction func openFileBtnPressed(_ sender: UIButton) {
+    @IBAction func ReadDataBtnPressed(_ sender: UIButton) {
+        view.endEditing(true)
+
         guard let name = openFileTxtField.text else {return}
         readData(from: name)
-        view.endEditing(true)
-        displayDataView.text = ""
     }
 
     @IBAction func addDataBtnPressed(_ sender: UIButton) {
@@ -108,8 +108,18 @@ class ViewController: UIViewController {
         readData(from: name)
     }
     
-    @IBAction func deleteFileBtnPressed(_ sender: UIButton) {
+    @IBAction func renameFileBtnPressed(_ sender: UIButton) {
+        displayDataView.text = ""
+
+        guard let name = renameAndRemoveFileTxtField.text?.trimmingCharacters(in: .whitespaces), !name.isEmpty else {return}
+        renameFile(from: name)
+    }
+    
+    @IBAction func removeFileBtnPressed(_ sender: UIButton) {
+        displayDataView.text = ""
         
+        guard let name = renameAndRemoveFileTxtField.text?.trimmingCharacters(in: .whitespaces), !name.isEmpty else {return}
+        removeFile(from: name)
     }
 }
 
@@ -142,7 +152,7 @@ extension ViewController {
 
     //MARK: - 1 Creating File.
     @objc func createFile(_: Any) {
-        
+
         self.statusBar.text = ""    //clean status bar first
         self.displayDataView.text = ""
         
@@ -191,7 +201,7 @@ extension ViewController {
     
     //MARK: - 2 Adding Data
     func addData(firstName: String, lastName: String) {
-            
+        
         let av = UIAlertController(title: "File Name", message: "Please enter file name for adding data.", preferredStyle: .alert)
         av.addTextField(configurationHandler: {$0.autocapitalizationType = .words})
         av.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -270,11 +280,9 @@ extension ViewController {
         self.present(av, animated: true, completion: nil)
         
     }
-    
-    //MARK: 4 Reading data
+
+    //MARK: 3 Reading data
     func readData(from name: String) {
-        
-        displayDataView.text = ""
 
         //1 creating file url
         self.fileURL = self.docsURL.appendingPathComponent(name.trimmingCharacters(in: .whitespaces)).appendingPathExtension("pplgrp")
@@ -315,8 +323,57 @@ extension ViewController {
             self.statusBar.text = " Can't find \(fileURL.lastPathComponent)"
         }
     }
+    
+    //MARK: - 4 Renaming File
+    func renameFile(from oldName: String) {
+        
+        let av = UIAlertController(title: "New File", message: "Enter name", preferredStyle: .alert)
+        av.addTextField { (text) in
+            text.autocapitalizationType = .words
+        }
+        av.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        av.addAction(UIAlertAction(title: "OK", style: .default, handler: { (_) in
+            guard let newName = av.textFields?[0].text?.trimmingCharacters(in: .whitespaces), !newName.isEmpty else {return}
+            
+            //1 Creating File URL.
+            let newFileName = self.docsURL.appendingPathComponent((newName as NSString).appendingPathExtension("pplgrp")!)
+            let oldFileName = self.docsURL.appendingPathComponent(oldName).appendingPathExtension("pplgrp")
+            
+        do {
+            
+            //2 removing file
+            try FileManager.default.moveItem(at: oldFileName, to: newFileName)
+            self.statusBar.text = " Renamed \(oldFileName.lastPathComponent) to \(newFileName.lastPathComponent)."
+            
+        } catch {
+            print(error)
+        }
 
-    //MARK: - 5 Force Saving
+        }))
+        
+        self.present(av, animated: true, completion: nil)
+    }
+        
+
+    
+    //MARK: - 5 Removing File
+    func removeFile(from name: String) {
+        
+        do {
+            
+            //1 url
+            self.fileURL = self.docsURL.appendingPathComponent(name).appendingPathExtension("pplgrp")
+
+            //2 removing file
+            try FileManager.default.removeItem(at: fileURL!)
+            self.statusBar.text = " \(String(describing: fileURL!.lastPathComponent)) has been removed."
+            
+        } catch {
+            print(error)
+        }
+    }
+
+    //MARK: - 6 Force Saving
     @objc func forceSave(_: Any?) {
         guard let doc = self.doc
         else {
